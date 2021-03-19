@@ -17,7 +17,7 @@ def get_news():
     return flask.jsonify({'jobs': [item.to_dict(
         only=(
             'id', 'job', 'team_leader', 'work_size', 'collaborators',
-            'start_date', 'end_date', 'is_finished', 'category')
+            'start_date', 'end_date', 'is_finished')
     ) for item in jobs]})
 
 
@@ -30,5 +30,5 @@ def get_one_job(job_id):
     return flask.jsonify({'jobs': jobs.to_dict(
         only=(
             'id', 'job', 'team_leader', 'work_size', 'collaborators',
-            'start_date', 'end_date', 'is_finished', 'category')
+            'start_date', 'end_date', 'is_finished')
     )})
