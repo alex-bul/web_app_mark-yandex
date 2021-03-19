@@ -11,10 +11,9 @@ from data.register_form import RegisterForm
 
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
+import os
 import jobs_api
 import datetime
-
-import sqlalchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -49,7 +48,8 @@ def main():
     # for user in db_sess.query(User).filter(addres='module_1'):
     #     print(user)
     db_sess = db_session.create_session()
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 
 @app.route('/news')
