@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-center flex-column">
+    <h1>Создание работы</h1>
+    <form action="" method="post" novalidate>
+        <div>
+            {{ form.csrf_token }}
+        </div>
+        {% for field in form if field.name not in 'csrf_token submit' %}
+        <div>
+            {{ field.label() }} <br/>
+            {{ field(class="form-control") }}
+            {% for error in field.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        <p class="pt-3">{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    </form>
+</div>
+
+{% endblock %}
