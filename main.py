@@ -3,7 +3,9 @@ from data import db_session
 from data.users import User
 from data.news import News
 from data.jobs import Jobs
+from data.department import Department
 
+from data.department_form import DepartmentForm
 from data.job_form import JobForm
 from data.news_form import NewsForm
 from data.login_form import LoginForm
@@ -227,6 +229,66 @@ def jobs_edit(job_id):
         return render_template('create_jobs.html', title='Создание работы',
                                form=form)
     return redirect('/')
+
+
+@app.route('/create_departments', methods=['GET', 'POST'])
+@login_required
+def department_add():
+    form = DepartmentForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        department = Department()
+        department.title = form.title.data
+        department.chief = current_user.id
+        department.members = form.members.data
+        department.email = form.email.data
+        db_sess.add(department)
+        db_sess.commit()
+        return redirect('/departments')
+    return render_template('create_departments.html', title='Создание департамента',
+                           form=form)
+
+
+@app.route('/departments_delete/<int:department_id>', methods=['GET', 'POST'])
+@login_required
+def department_delete(department_id):
+    db_sess = db_session.create_session()
+    if current_user.id == 1 or db_sess.query(Department).filter(Department.chief == current_user.id,
+                                                          Department.id == department_id).all():
+        db_sess.query(Department).filter(Department.id == department_id).delete()
+        db_sess.commit()
+        return redirect('/departments')
+
+
+@app.route('/departments/<int:department_id>', methods=['GET', 'POST'])
+@login_required
+def department_edit(department_id):
+    db_sess = db_session.create_session()
+    form = DepartmentForm()
+    if form.validate_on_submit():
+        department = db_sess.query(Department).filter(Department.id == department_id).first()
+        department.title = form.title.data
+        department.members = form.members.data
+        department.email = form.email.data
+        db_sess.add(department)
+        db_sess.commit()
+        return redirect('/departments')
+    if current_user.id == 1 or db_sess.query(Department).filter(Department.chief == current_user.id,
+                                                          Department.id == department_id).all():
+        department = db_sess.query(Department).filter(Department.id == department_id).first()
+        form.title.data = department.title
+        form.members.data = department.members
+        form.email.data = department.email
+
+        return render_template('create_departments.html', title='Редактирование департамента',
+                               form=form)
+    return redirect('/')
+
+
+@app.route('/departments')
+def departments():
+    db_sess = db_session.create_session()
+    return render_template('departments.html', jobs=db_sess.query(Department).all()[::-1])
 
 
 if __name__ == '__main__':
