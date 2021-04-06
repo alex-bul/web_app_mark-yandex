@@ -16,6 +16,7 @@
         <div class="col">Team leader</div>
         <div class="col">duration</div>
         <div class="col">List of collaborators</div>
+        <div class="col">Category</div>
         <div class="col">Is finished</div>
     </div>
     <div class="row bg-light">
@@ -24,6 +25,7 @@
         <div class="col">{{item.team_leader}}</div>
         <div class="col">{{item.work_size}}</div>
         <div class="col">{{item.collaborators}}</div>
+        <div class="col">{{item.category_id}}</div>
         {% if item.is_finished == True %}
         <div class="col bg-success">Is finished</div>
         {% else %}

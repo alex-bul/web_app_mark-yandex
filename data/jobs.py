@@ -18,6 +18,7 @@ class Jobs(SqlAlchemyBase, SerializerMixin):
     start_date = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     end_date = sqlalchemy.Column(sqlalchemy.DateTime, unique=True)
     is_finished = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
+    category_id = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
 
     user = orm.relation('User')
 
